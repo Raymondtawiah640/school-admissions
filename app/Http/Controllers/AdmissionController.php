@@ -80,7 +80,7 @@ class AdmissionController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Admission status updated successfully',
+            'message' => 'Admission status updated successfully.',
             'data' => $admission
         ], 200);
     }
