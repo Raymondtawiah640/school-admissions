@@ -22,4 +22,10 @@ class AdmissionService
         $admission->update($data);
         return $admission;
     }
+
+    public function searchAdmissions(string $field, string $value)
+{
+    return Admission::where($field, 'like', "%$value%")->latest()->get();
+}
+
 }
