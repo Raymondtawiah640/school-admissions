@@ -5,12 +5,20 @@ use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\UserController;
 
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/admissions', [AdmissionController::class, 'index']);
-    Route::patch('/admissions/{id}/status', [AdmissionController::class, 'updateStatus']);
+Route::prefix('auth')->group(function () {
+    Route::post('/register', [UserController::class, 'register']);
+    Route::post('/login', [UserController::class, 'login']);
 });
 
-Route::post('/admissions', [AdmissionController::class, 'store']);
 
-Route::post('/register', [UserController::class, 'register']);
-Route::post('/login', [UserController::class, 'login']);
+Route::prefix('admissions')->group(function () {
+
+    Route::post('/', [AdmissionController::class, 'store']);
+
+    // Protected (auth required)
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/', [AdmissionController::class, 'index']);
+        Route::patch('/{id}/status', [AdmissionController::class, 'updateStatus']);
+    });
+
+});
