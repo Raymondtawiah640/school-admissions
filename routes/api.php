@@ -11,14 +11,13 @@ Route::prefix('auth')->group(function () {
 });
 
 
-Route::prefix('admissions')->group(function () {
+Route::post('admissions', [AdmissionController::class, 'store']); 
 
-    Route::post('/', [AdmissionController::class, 'store']);
+Route::middleware('auth:sanctum')->group(function () {
+    
+    Route::apiResource('admissions', AdmissionController::class)
+        ->except(['store']); 
 
-    // Protected (auth required)
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/', [AdmissionController::class, 'index']);
-        Route::patch('/{id}/status', [AdmissionController::class, 'updateStatus']);
-    });
+    Route::patch('admissions/{id}/status', [AdmissionController::class, 'updateStatus']);
 
 });
