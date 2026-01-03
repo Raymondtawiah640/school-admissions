@@ -21,6 +21,13 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+        if ($this->is('api/auth/change-password')) {
+            return [
+                'current_password' => 'required|string',
+                'new_password' => 'required|string|min:8|confirmed',
+            ];
+        }
+
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
