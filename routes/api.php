@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\EmailsController;
 
 Route::prefix('auth')->group(function () {
     Route::post('/register', [UserController::class, 'register']);
@@ -26,3 +26,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('admissions/{id}/status', [AdmissionController::class, 'updateStatus']);
 
 });
+
+
+Route::post('welcome-email', [EmailsController::class, 'welcomeEmail']);
