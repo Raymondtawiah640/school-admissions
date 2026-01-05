@@ -21,7 +21,7 @@ class WelcomeMail extends Mailable
      * @param string $subject
      * @param string $htmlContent
      */
-    public function __construct(string $subject = 'Welcome', string $htmlContent = '<p>Welcome to our system</p>')
+    public function __construct(string $subject, string $htmlContent)
     {
         $this->subject = $subject;
         $this->htmlContent = $htmlContent;

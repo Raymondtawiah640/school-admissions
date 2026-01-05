@@ -25,10 +25,10 @@ class EmailsController extends Controller
     public function welcomeEmail(Request $request)
     {
         try {
-            // Get parameters from request or use defaults
-            $email = $request->input('email', 'recipient@gmail.com');
-            $subject = $request->input('subject', 'Welcome to School Management System');
-            $content = $request->input('content', '<p>Welcome to School Management System</p>');
+            // Get parameters from request
+            $email = $request->input('email');
+            $subject = $request->input('subject');
+            $content = $request->input('content');
             
             Log::info("Attempting to send welcome email to: {$email}");
             

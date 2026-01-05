@@ -17,7 +17,7 @@ class EmailService
      * @param string $content
      * @return array
      */
-    public function sendWelcomeEmail(string $toEmail, string $subject = 'Welcome', string $content = 'Welcome to our system'): array
+    public function sendWelcomeEmail(string $toEmail, string $subject, string $content): array
     {
         try {
             Log::info("Sending welcome email to: {$toEmail}");
