@@ -12,6 +12,7 @@ class Admission extends Model
     'gender',
     'class_applied',
     'parent_name',
+    'parent_email',
     'parent_contact',
     'address',
     'interest',
