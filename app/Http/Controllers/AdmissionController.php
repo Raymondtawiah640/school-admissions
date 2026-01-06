@@ -49,4 +49,25 @@ class AdmissionController extends Controller
             'data' => $admission
         ], 200);
     }
+
+   public function scheduleTestAndNotifyParent($id)
+{
+    if (!$this->userService->isAdmin()) {
+        return response()->json(['message' => 'Unauthorized'], 403);
+    }
+
+    $admission = $this->admissionService->findAdmissionById($id);
+
+    if (!$admission) {
+        return response()->json(['message' => 'Admission not found'], 404);
+    }
+
+    $testDetails = $this->admissionService->scheduleTestAndNotify($admission);
+
+    return response()->json([
+        'message' => 'Parent notified about the admission test successfully.',
+        'test_details' => $testDetails,
+    ], 200);
+}
+
 }

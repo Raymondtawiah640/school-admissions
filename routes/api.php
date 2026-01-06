@@ -3,9 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdmissionController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\EmailsController;
-use App\Http\Controllers\ImageUploadController;
-use App\Http\Controllers\PaystackController;
 
 Route::prefix('auth')->group(function () {
     Route::post('/register', [UserController::class, 'register']);
@@ -27,14 +24,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::patch('admissions/{id}/status', [AdmissionController::class, 'updateStatus']);
 
+    Route::patch('admissions/{id}/schedule-test', [AdmissionController::class, 'scheduleTestAndNotifyParent']);
+
 });
-
-
-Route::post('welcome-email', [EmailsController::class, 'welcomeEmail']);
-
-Route::post('upload-image', [ImageUploadController::class, 'uploadImage']);
-
-// Paystack API Routes
-Route::post('initialize-payment', [PaystackController::class, 'initializePayment']);
-Route::post('verify-payment', [PaystackController::class, 'verifyPayment']);
-Route::get('transactions', [PaystackController::class, 'fetchTransactions']);

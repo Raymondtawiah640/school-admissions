@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\Admission;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdmissionTestScheduled;
 
 class AdmissionService
 {
@@ -23,9 +25,23 @@ class AdmissionService
         return $admission;
     }
 
-    public function searchAdmissions(string $field, string $value)
-{
-    return Admission::where($field, 'like', "%$value%")->latest()->get();
-}
+        public function scheduleTestAndNotify(Admission $admission)
+    {
+        $testDetails = [
+            'test_date' => $admission->test_date ?? now()->addDays(7),
+            'test_time' => $admission->test_time ?? '10:00 AM',
+            'venue' => $admission->venue ?? 'School Campus',
+        ];
 
+        // Send email notification
+        Mail::to($admission->parent_email)
+            ->send(new AdmissionTestScheduled($admission, $testDetails));
+
+        return $testDetails; 
+    }
+
+    public function findAdmissionById(int $id): ?Admission
+    {
+        return Admission::find($id);
+    }
 }
