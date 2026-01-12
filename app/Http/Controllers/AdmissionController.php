@@ -66,7 +66,7 @@ class AdmissionController extends Controller
 
     return response()->json([
         'message' => 'Parent notified about the admission test successfully.',
-        'test_details' => $testDetails,
+        'test_details' => $Data,
     ], 200);
 }
 

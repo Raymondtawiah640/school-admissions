@@ -25,12 +25,12 @@ class AdmissionService
         return $admission;
     }
 
-        public function scheduleTestAndNotify(Admission $admission)
-    {
+        public function scheduleTestAndNotify(Admission $admission, array $data)
+        {
         $testDetails = [
-            'test_date' => $admission->test_date ?? now()->addDays(7),
-            'test_time' => $admission->test_time ?? '10:00 AM',
-            'venue' => $admission->venue ?? 'School Campus',
+            'test_date' => $data['test_date'],
+            'test_time' => $data['test_time'],
+            'venue' => $data['venue'],
         ];
 
         // Send email notification

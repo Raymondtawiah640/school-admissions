@@ -17,7 +17,10 @@ class Admission extends Model
     'address',
     'interest',
     'remarks',
-    'status'
+    'status',
+    'test_date',
+    'test_time',
+    'venue'
 ];
 
 }

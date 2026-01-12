@@ -25,6 +25,9 @@ class AdmissionRequest extends FormRequest
             'address' => 'required|string',
             'interest' => 'nullable|string|max:255',
             'remarks' => 'nullable|string',
+            'test_date' => 'nullable|date',
+            'test_time' => 'nullable|string|max:100',
+            'venue' => 'nullable|string|max:255',
         ];
     }
 }
