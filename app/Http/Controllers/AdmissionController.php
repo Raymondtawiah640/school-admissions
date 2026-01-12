@@ -2,75 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Admission;
+use App\Http\Requests\AdmissionRequest;
+use App\Http\Requests\UpdateAdmissionStatusRequest;
+use App\Services\AdmissionService;
+use App\Services\UserService;
 
 class AdmissionController extends Controller
 {
-    /**
-     * Public: Submit admission
-     */
-    public function store(Request $request)
+    public function __construct(
+        private AdmissionService $admissionService,
+        private UserService $userService
+    ){}
+    
+    public function store(AdmissionRequest $request)
     {
-        $validated = $request->validate([
-            'name'            => 'required|string|max:255',
-            'date_of_birth'   => 'required|date',
-            'gender'          => 'required|string|max:50',
-            'class_applied'   => 'required|string|max:100',
-            'parent_name'     => 'required|string|max:255',
-            'parent_contact'  => 'required|string|max:100',
-            'address'         => 'required|string',
-            'interest'        => 'nullable|string|max:255',
-            'remarks'         => 'nullable|string',
-        ]);
-
-        // Backend controls status
-        $validated['status'] = 'pending';
-
-        $admission = Admission::create($validated);
-
+        $admission = $this->admissionService->createAdmission($request->validated());
         return response()->json([
             'message' => 'Admission application submitted successfully.',
-            'data'    => $admission
+            'data' => $admission 
         ], 201);
     }
 
-    /**
-     * Admin only: View all admissions
-     */
-    public function index(Request $request)
+    
+    public function index()
     {
-        // Authenticated user (via middleware)
-        $user = $request->user();
-
-        if ($user->role !== 'admin') {
+        if (!$this->userService->isAdmin()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        return response()->json(Admission::all(), 200);
+        return response()->json([
+            'data' => $this->admissionService->listAdmission()
+        ], 200);
     }
 
-    /**
-     * Admin only: Approve or reject
-     */
-    public function updateStatus(Request $request, $id)
+    public function updateStatus(UpdateAdmissionStatusRequest $request, $id)
     {
-        $user = $request->user();
-
-        if ($user->role !== 'admin') {
+        if (!$this->userService->isAdmin()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $validated = $request->validate([
-            'status' => 'required|in:approved,rejected',
-        ]);
-
-        $admission = Admission::findOrFail($id);
-        $admission->update($validated);
+        $admission = $this->admissionService->updateStatus($id, $request->validated());
 
         return response()->json([
             'message' => 'Admission status updated successfully.',
-            'data'    => $admission
+            'data' => $admission
         ], 200);
     }
+
+   public function scheduleTestAndNotifyParent($id)
+{
+    if (!$this->userService->isAdmin()) {
+        return response()->json(['message' => 'Unauthorized'], 403);
+    }
+
+    $admission = $this->admissionService->findAdmissionById($id);
+
+    if (!$admission) {
+        return response()->json(['message' => 'Admission not found'], 404);
+    }
+
+    $testDetails = $this->admissionService->scheduleTestAndNotify($admission);
+
+    return response()->json([
+        'message' => 'Parent notified about the admission test successfully.',
+        'test_details' => $Data,
+    ], 200);
+}
+
 }

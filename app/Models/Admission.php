@@ -12,11 +12,15 @@ class Admission extends Model
     'gender',
     'class_applied',
     'parent_name',
+    'parent_email',
     'parent_contact',
     'address',
     'interest',
     'remarks',
-    'status'
+    'status',
+    'test_date',
+    'test_time',
+    'venue'
 ];
 
 }
